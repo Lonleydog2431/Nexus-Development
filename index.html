@@ -125,6 +125,43 @@ transform: scale(1.05);
 background-size: cover;
 background-position: center;
 }
+
+.email-options {
+display: flex;
+flex-direction: column;
+gap: 8px;
+margin-top: 16px;
+}
+
+.email-option-btn {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+padding: 10px;
+border-radius: 8px;
+cursor: pointer;
+font-weight: 500;
+transition: all 0.2s ease;
+}
+
+.gmail-btn {
+background-color: #ea4335;
+color: white;
+}
+
+.gmail-btn:hover {
+background-color: #d33426;
+}
+
+.mailto-btn {
+background-color: #5D5CDE;
+color: white;
+}
+
+.mailto-btn:hover {
+background-color: #4A49B8;
+}
 </style>
 </head>
 <body>
@@ -339,7 +376,15 @@ background-position: center;
 
 <div id="formError" class="text-red-500 text-sm mt-2 hidden"></div>
 <div id="formSuccess" class="text-green-500 text-sm mt-2 hidden">
-    Message sent! Your email client should open to send the message. If it doesn't open automatically, please email us directly at nexusdevelopment103@gmail.com
+    <p class="mb-2">Message ready! Choose how you'd like to send it:</p>
+    <div class="email-options">
+        <a id="gmailLink" href="#" target="_blank" class="email-option-btn gmail-btn">
+            <i class="fab fa-google"></i> Send with Gmail
+        </a>
+        <a id="mailtoLink" href="#" class="email-option-btn mailto-btn">
+            <i class="fas fa-envelope"></i> Send with Email App
+        </a>
+    </div>
 </div>
 
 <button type="submit" class="nexus-btn nexus-primary-btn text-white py-2 px-4 rounded-md w-full">Send Message</button>
@@ -565,7 +610,7 @@ window.addEventListener('DOMContentLoaded', () => {
         avatar.style.backgroundImage = `url(${generateAvatar(i-1)})`;
     }
     
-    // Form submission with mailto link
+    // Form submission with multiple email options
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
@@ -605,22 +650,27 @@ window.addEventListener('DOMContentLoaded', () => {
             
             // Prepare email content
             const subject = `Contact from ${name} via website`;
-            const emailBody = `Name: ${name}%0D%0A%0D%0AEmail: ${email}%0D%0A%0D%0AMessage:%0D%0A${message}`;
+            const emailBody = `Name: ${name}\n\nEmail: ${email}\n\nMessage:\n${message}`;
             
-            // Create mailto link
-            const mailtoLink = `mailto:nexusdevelopment103@gmail.com?subject=${encodeURIComponent(subject)}&body=${emailBody}`;
+            // Create Gmail compose link
+            // This will open Gmail's compose window with the data pre-filled
+            const gmailLink = document.getElementById('gmailLink');
+            if (gmailLink) {
+                const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=nexusdevelopment103@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+                gmailLink.href = gmailUrl;
+            }
             
-            // Open email client
-            window.location.href = mailtoLink;
+            // Create traditional mailto link for other email clients
+            const mailtoLink = document.getElementById('mailtoLink');
+            if (mailtoLink) {
+                const mailtoUrl = `mailto:nexusdevelopment103@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody.replace(/\n/g, '%0D%0A'))}`;
+                mailtoLink.href = mailtoUrl;
+            }
             
-            // Show success message (in case the email client doesn't open)
+            // Show success message with options
             const successMsg = document.getElementById('formSuccess');
             if (successMsg) {
                 successMsg.style.display = 'block';
-                // Hide success message after 5 seconds
-                setTimeout(() => {
-                    successMsg.style.display = 'none';
-                }, 5000);
             }
             
             // Reset form
