@@ -104,6 +104,27 @@ background-color: var(--primary-hover);
 .star-rating {
 color: #f9a826;
 }
+
+.nexus-input {
+background-color: var(--input-bg);
+border: 1px solid var(--border-color);
+color: var(--text-color);
+}
+
+.service-image {
+background-size: cover;
+background-position: center;
+transition: transform 0.3s ease;
+}
+
+.service-card:hover .service-image {
+transform: scale(1.05);
+}
+
+.generated-avatar {
+background-size: cover;
+background-position: center;
+}
 </style>
 </head>
 <body>
@@ -139,7 +160,7 @@ color: #f9a826;
 <a href="#services" class="nexus-btn nexus-primary-btn text-white px-6 py-3 rounded-lg font-medium text-center">Explore Services</a>
 </div>
 <div class="md:w-1/2">
-<img src="https://images.unsplash.com/photo-1593642632470-8b12e3d0c7e8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fGRpc2NvcmQlMjBpbWFnZXxlbnwwfHx8fDE2NzYxMDY5NzQ&ixlib=rb-1.2.1&q=80&w=800" alt="Discord Server" class="rounded-lg shadow-xl w-full"/>
+<div class="rounded-lg shadow-xl w-full h-64 md:h-80 overflow-hidden bg-gray-200 dark:bg-gray-700" id="heroImage"></div>
 </div>
 </div>
 </div>
@@ -156,46 +177,54 @@ color: #f9a826;
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 <!-- Basic Revamping -->
-<div class="nexus-card overflow-hidden">
-<img src="https://images.unsplash.com/photo-1528306710976-0c2c7e5c8d8b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGRpc2NvcmQlMjBpbWFnZXxlbnwwfHx8fDE2NzYxMDY5NzU&ixlib=rb-1.2.1&q=80&w=800" alt="Basic Revamping" class="w-full h-48 object-cover" />
+<div class="nexus-card overflow-hidden service-card">
+<div class="w-full h-48 overflow-hidden">
+<div class="service-image w-full h-full" id="basicService"></div>
+</div>
 <div class="p-6">
 <h3 class="font-bold text-xl mb-2">Basic Revamping</h3>
 <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">A simple yet effective revamp to enhance your server's look and feel.</p>
 <span class="font-bold text-primary-600">$49</span>
-<button class="nexus-btn nexus-primary-btn text-white w-full py-2 rounded-lg font-medium text-center">Request Service</button>
+<button class="nexus-btn nexus-primary-btn text-white w-full py-2 rounded-lg font-medium text-center mt-4">Request Service</button>
 </div>
 </div>
 
 <!-- Medium Revamping -->
-<div class="nexus-card overflow-hidden">
-<img src="https://images.unsplash.com/photo-1610846764462-2b5e8e2b06bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGRpc2NvcmQlMjBpbWFnZXxlbnwwfHx8fDE2NzYxMDY5NzY&ixlib=rb-1.2.1&q=80&w=800" alt="Medium Revamping" class="w-full h-48 object-cover" />
+<div class="nexus-card overflow-hidden service-card">
+<div class="w-full h-48 overflow-hidden">
+<div class="service-image w-full h-full" id="mediumService"></div>
+</div>
 <div class="p-6">
 <h3 class="font-bold text-xl mb-2">Medium Revamping</h3>
 <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">A more comprehensive revamp with additional features for better engagement.</p>
 <span class="font-bold text-primary-600">$99</span>
-<button class="nexus-btn nexus-primary-btn text-white w-full py-2 rounded-lg font-medium text-center">Request Service</button>
+<button class="nexus-btn nexus-primary-btn text-white w-full py-2 rounded-lg font-medium text-center mt-4">Request Service</button>
 </div>
 </div>
 
 <!-- Large Revamping -->
-<div class="nexus-card overflow-hidden">
-<img src="https://images.unsplash.com/photo-1545012175-7a4f7f3b4cb5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDN8fGRpc2NvcmQlMjBpbWFnZXxlbnwwfHx8fDE2NzYxMDY5NzY&ixlib=rb-1.2.1&q=80&w=800" alt="Large Revamping" class="w-full h-48 object-cover" />
+<div class="nexus-card overflow-hidden service-card">
+<div class="w-full h-48 overflow-hidden">
+<div class="service-image w-full h-full" id="largeService"></div>
+</div>
 <div class="p-6">
 <h3 class="font-bold text-xl mb-2">Large Revamping</h3>
 <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">An extensive revamp with advanced customization and features.</p>
 <span class="font-bold text-primary-600">$199</span>
-<button class="nexus-btn nexus-primary-btn text-white w-full py-2 rounded-lg font-medium text-center">Request Service</button>
+<button class="nexus-btn nexus-primary-btn text-white w-full py-2 rounded-lg font-medium text-center mt-4">Request Service</button>
 </div>
 </div>
 
 <!-- Custom Revamping -->
-<div class="nexus-card overflow-hidden">
-<img src="https://images.unsplash.com/photo-1593642632470-8b12e3d0c7e8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDB8fGRpc2NvcmQlMjBpbWFnZXxlbnwwfHx8fDE2NzYxMDY5NzU&ixlib=rb-1.2.1&q=80&w=800" alt="Custom Revamping" class="w-full h-48 object-cover" />
+<div class="nexus-card overflow-hidden service-card">
+<div class="w-full h-48 overflow-hidden">
+<div class="service-image w-full h-full" id="customService"></div>
+</div>
 <div class="p-6">
 <h3 class="font-bold text-xl mb-2">Custom Revamping</h3>
 <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">Tailored revamping services based on your specific needs.</p>
 <span class="font-bold text-primary-600">Contact for Pricing</span>
-<button class="nexus-btn nexus-primary-btn text-white w-full py-2 rounded-lg font-medium text-center">Request Service</button>
+<button class="nexus-btn nexus-primary-btn text-white w-full py-2 rounded-lg font-medium text-center mt-4">Request Service</button>
 </div>
 </div>
 </div>
@@ -212,7 +241,7 @@ color: #f9a826;
 <!-- Testimonial 1 -->
 <div class="nexus-card p-6">
 <div class="flex items-center mb-4">
-<img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Client 1" class="w-12 h-12 rounded-full mr-4" />
+<div class="w-12 h-12 rounded-full mr-4 generated-avatar" id="avatar1"></div>
 <div>
 <h4 class="font-bold">John Doe</h4>
 <p class="text-sm text-gray-600 dark:text-gray-400">Discord Admin</p>
@@ -231,7 +260,7 @@ color: #f9a826;
 <!-- Testimonial 2 -->
 <div class="nexus-card p-6">
 <div class="flex items-center mb-4">
-<img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Client 2" class="w-12 h-12 rounded-full mr-4" />
+<div class="w-12 h-12 rounded-full mr-4 generated-avatar" id="avatar2"></div>
 <div>
 <h4 class="font-bold">Sarah Johnson</h4>
 <p class="text-sm text-gray-600 dark:text-gray-400">Community Manager</p>
@@ -250,7 +279,7 @@ color: #f9a826;
 <!-- Testimonial 3 -->
 <div class="nexus-card p-6">
 <div class="flex items-center mb-4">
-<img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Client 3" class="w-12 h-12 rounded-full mr-4" />
+<div class="w-12 h-12 rounded-full mr-4 generated-avatar" id="avatar3"></div>
 <div>
 <h4 class="font-bold">Robert Parker</h4>
 <p class="text-sm text-gray-600 dark:text-gray-400">Server Owner</p>
@@ -279,26 +308,10 @@ color: #f9a826;
 
 <div class="space-y-4 mb-6">
 <div class="flex items-start">
-<div class="p-2 bg-primary-600 bg-opacity-10 rounded-full mr-3 mt-1"><i class="fas fa-map-marker-alt text-primary-600"></i></div>
-<div>
-<h4 class="font-bold text-gray-800 dark:text-gray-200">Our Location</h4>
-<p class="text-gray-600 dark:text-gray-400">123 Tech Street, Innovation City, CA 92100</p>
-</div>
-</div>
-
-<div class="flex items-start">
 <div class="p-2 bg-primary-600 bg-opacity-10 rounded-full mr-3 mt-1"><i class="fas fa-envelope text-primary-600"></i></div>
 <div>
 <h4 class="font-bold text-gray-800 dark:text-gray-200">Email Us</h4>
-<p class="text-gray-600 dark:text-gray-400">contact@nexusdevelopment.com</p>
-</div>
-</div>
-
-<div class="flex items-start">
-<div class="p-2 bg-primary-600 bg-opacity-10 rounded-full mr-3 mt-1"><i class="fas fa-phone-alt text-primary-600"></i></div>
-<div>
-<h4 class="font-bold text-gray-800 dark:text-gray-200">Call Us</h4>
-<p class="text-gray-600 dark:text-gray-400">+1 (800) 123-4567</p>
+<p class="text-gray-600 dark:text-gray-400">nexusdevelopment103@gmail.com</p>
 </div>
 </div>
 </div>
@@ -343,7 +356,224 @@ color: #f9a826;
 </footer>
 
 <script>
-// JavaScript for handling form submission, etc. can be added here
+// Generate abstract hero image
+function generateHeroImage() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 800;
+    canvas.height = 500;
+    const ctx = canvas.getContext('2d');
+    
+    // Create gradient background
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop(0, '#5D5CDE');
+    gradient.addColorStop(1, '#4A49B8');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw discord-like elements
+    const numShapes = 20;
+    for (let i = 0; i < numShapes; i++) {
+        ctx.beginPath();
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        const size = 20 + Math.random() * 60;
+        
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.3})`;
+        ctx.arc(x, y, size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    
+    // Add some lines for tech feeling
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 10; i++) {
+        ctx.beginPath();
+        const x = Math.random() * canvas.width;
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+    }
+    
+    // Add a stylish discord-like logo silhouette
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.beginPath();
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const logoSize = 150;
+    
+    // Draw a stylized chat bubble shape
+    ctx.moveTo(centerX - logoSize/2, centerY - logoSize/3);
+    ctx.quadraticCurveTo(centerX - logoSize/2, centerY - logoSize/2, centerX, centerY - logoSize/2);
+    ctx.quadraticCurveTo(centerX + logoSize/2, centerY - logoSize/2, centerX + logoSize/2, centerY - logoSize/3);
+    ctx.quadraticCurveTo(centerX + logoSize/2, centerY + logoSize/3, centerX, centerY + logoSize/2);
+    ctx.quadraticCurveTo(centerX - logoSize/2, centerY + logoSize/3, centerX - logoSize/2, centerY - logoSize/3);
+    ctx.fill();
+    
+    return canvas.toDataURL();
+}
+
+// Generate service images
+function generateServiceImage(index) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 400;
+    canvas.height = 200;
+    const ctx = canvas.getContext('2d');
+    
+    // Different color schemes for different services
+    const colorSchemes = [
+        ['#5D5CDE', '#7F7EE4'], // Basic
+        ['#6C63FF', '#8F89FF'], // Medium
+        ['#FF6B6B', '#FF9E9E'], // Large
+        ['#38A169', '#68D391']  // Custom
+    ];
+    
+    const colors = colorSchemes[index % colorSchemes.length];
+    
+    // Background gradient
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop(0, colors[0]);
+    gradient.addColorStop(1, colors[1]);
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Add patterns for visual interest
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+    
+    // Different patterns for each service
+    switch(index) {
+        case 0: // Basic - Simple circles
+            for (let i = 0; i < 10; i++) {
+                ctx.beginPath();
+                ctx.arc(
+                    Math.random() * canvas.width, 
+                    Math.random() * canvas.height, 
+                    5 + Math.random() * 20, 
+                    0, 
+                    Math.PI * 2
+                );
+                ctx.fill();
+            }
+            break;
+        case 1: // Medium - Grid pattern
+            const gridSize = 20;
+            for (let x = 0; x < canvas.width; x += gridSize) {
+                for (let y = 0; y < canvas.height; y += gridSize) {
+                    if (Math.random() > 0.5) {
+                        ctx.fillRect(x, y, gridSize/2, gridSize/2);
+                    }
+                }
+            }
+            break;
+        case 2: // Large - Diagonal lines
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+            ctx.lineWidth = 2;
+            for (let i = -canvas.height; i < canvas.width; i += 20) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i + canvas.height, canvas.height);
+                ctx.stroke();
+            }
+            break;
+        case 3: // Custom - Hexagons
+            const hexSize = 30;
+            for (let x = 0; x < canvas.width + hexSize; x += hexSize * 1.5) {
+                for (let y = 0; y < canvas.height + hexSize; y += hexSize * 0.866 * 2) {
+                    const offsetX = (Math.floor(y / (hexSize * 0.866 * 2)) % 2) * hexSize * 0.75;
+                    drawHexagon(ctx, x + offsetX, y, hexSize * 0.5);
+                }
+            }
+            break;
+    }
+    
+    // Add some text indicating the service tier
+    const serviceTiers = ['BASIC', 'MEDIUM', 'PREMIUM', 'CUSTOM'];
+    ctx.font = 'bold 24px Arial';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(serviceTiers[index], canvas.width / 2, canvas.height / 2);
+    
+    return canvas.toDataURL();
+}
+
+// Helper function to draw hexagon
+function drawHexagon(ctx, x, y, size) {
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+        const angle = Math.PI / 3 * i;
+        const xPos = x + size * Math.cos(angle);
+        const yPos = y + size * Math.sin(angle);
+        if (i === 0) {
+            ctx.moveTo(xPos, yPos);
+        } else {
+            ctx.lineTo(xPos, yPos);
+        }
+    }
+    ctx.closePath();
+    ctx.fill();
+}
+
+// Generate avatar for testimonials
+function generateAvatar(index) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 100;
+    canvas.height = 100;
+    const ctx = canvas.getContext('2d');
+    
+    // Background color
+    const colors = [
+        '#5D5CDE', // Blue
+        '#FF6B6B', // Red
+        '#38A169'  // Green
+    ];
+    
+    ctx.fillStyle = colors[index % colors.length];
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Add initials or pattern
+    const initials = ['JD', 'SJ', 'RP'];
+    ctx.font = 'bold 40px Arial';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(initials[index % initials.length], canvas.width / 2, canvas.height / 2);
+    
+    return canvas.toDataURL();
+}
+
+// Set image sources when page loads
+window.addEventListener('DOMContentLoaded', () => {
+    // Set hero image
+    const heroImage = document.getElementById('heroImage');
+    heroImage.style.backgroundImage = `url(${generateHeroImage()})`;
+    
+    // Set service images
+    const serviceIds = ['basicService', 'mediumService', 'largeService', 'customService'];
+    serviceIds.forEach((id, index) => {
+        const element = document.getElementById(id);
+        element.style.backgroundImage = `url(${generateServiceImage(index)})`;
+    });
+    
+    // Set avatar images
+    for (let i = 1; i <= 3; i++) {
+        const avatar = document.getElementById(`avatar${i}`);
+        avatar.style.backgroundImage = `url(${generateAvatar(i-1)})`;
+    }
+    
+    // Form submission
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            
+            alert('Thank you for your message! We will get back to you soon.');
+            contactForm.reset();
+        });
+    }
+});
 </script>
 </body>
 </html>
