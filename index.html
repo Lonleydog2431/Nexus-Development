@@ -337,6 +337,11 @@ background-position: center;
 <textarea id="message" rows="4" class="nexus-input rounded-md w-full py-2 px-3 text-base" placeholder="Your message"></textarea>
 </div>
 
+<div id="formError" class="text-red-500 text-sm mt-2 hidden"></div>
+<div id="formSuccess" class="text-green-500 text-sm mt-2 hidden">
+    Message sent! Your email client should open to send the message. If it doesn't open automatically, please email us directly at nexusdevelopment103@gmail.com
+</div>
+
 <button type="submit" class="nexus-btn nexus-primary-btn text-white py-2 px-4 rounded-md w-full">Send Message</button>
 </div>
 </form>
@@ -560,16 +565,65 @@ window.addEventListener('DOMContentLoaded', () => {
         avatar.style.backgroundImage = `url(${generateAvatar(i-1)})`;
     }
     
-    // Form submission
+    // Form submission with mailto link
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const message = document.getElementById('message').value;
             
-            alert('Thank you for your message! We will get back to you soon.');
+            // Get form values
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+            
+            // Basic form validation
+            if (!name || !email || !message) {
+                const errorMsg = document.getElementById('formError');
+                if (errorMsg) {
+                    errorMsg.textContent = 'Please fill out all fields.';
+                    errorMsg.style.display = 'block';
+                }
+                return;
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                const errorMsg = document.getElementById('formError');
+                if (errorMsg) {
+                    errorMsg.textContent = 'Please enter a valid email address.';
+                    errorMsg.style.display = 'block';
+                }
+                return;
+            }
+            
+            // Clear any previous error
+            const errorMsg = document.getElementById('formError');
+            if (errorMsg) {
+                errorMsg.style.display = 'none';
+            }
+            
+            // Prepare email content
+            const subject = `Contact from ${name} via website`;
+            const emailBody = `Name: ${name}%0D%0A%0D%0AEmail: ${email}%0D%0A%0D%0AMessage:%0D%0A${message}`;
+            
+            // Create mailto link
+            const mailtoLink = `mailto:nexusdevelopment103@gmail.com?subject=${encodeURIComponent(subject)}&body=${emailBody}`;
+            
+            // Open email client
+            window.location.href = mailtoLink;
+            
+            // Show success message (in case the email client doesn't open)
+            const successMsg = document.getElementById('formSuccess');
+            if (successMsg) {
+                successMsg.style.display = 'block';
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    successMsg.style.display = 'none';
+                }, 5000);
+            }
+            
+            // Reset form
             contactForm.reset();
         });
     }
