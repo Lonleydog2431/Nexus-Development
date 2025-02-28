@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nexus Development | Services</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #5d5cde;
+        --primary-hover: #4a49b8;
+        --secondary-color: #f9a826;
+        --danger-color: #e53e3e;
+        --success-color: #38a169;
+        --transition-speed: 0.3s;
+      }
+
+      /* Light mode */
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg-color: #ffffff;
+          --card-bg: #f9fafb;
+          --text-color: #1f2937;
+          --text-muted: #6b7280;
+          --border-color: #e5e7eb;
+          --input-bg: #ffffff;
+          --header-bg: #ffffff;
+          --footer-bg: #f3f4f6;
+          --hero-bg: #f9fafb;
+          --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+            0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+      }
+
+      /* Dark mode */
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg-color: #111827;
+          --card-bg: #1f2937;
+          --text-color: #f9fafb;
+          --text-muted: #9ca3af;
+          --border-color: #374151;
+          --input-bg: #111827;
+          --header-bg: #0f172a;
+          --footer-bg: #0f172a;
+          --hero-bg: #0f172a;
+          --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2),
+            0 2px 4px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .bg-white {
+          background-color: var(--card-bg) !important;
+        }
+
+        .border-gray-200 {
+          border-color: var(--border-color) !important;
+        }
+
+        input,
+        textarea,
+        select {
+          background-color: var(--input-bg) !important;
+          color: var(--text-color) !important;
+          border-color: var(--border-color) !important;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+          color: var(--text-muted) !important;
+        }
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+          Roboto, sans-serif;
+        transition: background-color var(--transition-speed) ease;
+      }
+
+      .nexus-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        box-shadow: var(--shadow);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .nexus-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+
+      .nexus-header {
+        background-color: var(--header-bg);
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .nexus-footer {
+        background-color: var(--footer-bg);
+        border-top: 1px solid var(--border-color);
+      }
+
+      .nexus-btn {
+        transition: all 0.2s ease;
+      }
+
+      .nexus-btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .nexus-btn:active {
+        transform: translateY(0);
+      }
+
+      .nexus-primary-btn {
+        background-color: var(--primary-color);
+      }
+
+      .nexus-primary-btn:hover {
+        background-color: var(--primary-hover);
+      }
+
+      .nexus-input {
+        border: 1px solid var(--border-color);
+        background-color: var(--input-bg);
+        color: var(--text-color);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .nexus-input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(93, 92, 222, 0.25);
+        outline: none;
+      }
+
+      .animate-fade-in {
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .hero-section {
+        background-color: var(--hero-bg);
+        background-image: linear-gradient(
+          to right,
+          rgba(93, 92, 222, 0.05),
+          rgba(93, 92, 222, 0.1)
+        );
+      }
+
+      .category-card {
+        transition: all 0.3s ease;
+        background-size: cover;
+        background-position: center;
+        height: 180px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 0.5rem;
+      }
+
+      .category-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.3),
+          rgba(0, 0, 0, 0.7)
+        );
+      }
+
+      .category-card:hover {
+        transform: scale(1.03);
+      }
+
+      .category-title {
+        position: relative;
+        z-index: 10;
+      }
+
+      /* Star Rating */
+      .star-rating {
+        color: #f9a826;
+      }
+
+      /* Featured Tag */
+      .featured-tag {
+        background-color: rgba(93, 92, 222, 0.9);
+        color: white;
+        border-radius: 0 0 0.5rem 0;
+        padding: 0.25rem 0.75rem;
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      /* Toast notifications */
+      .toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        max-width: 350px;
+        padding: 16px 20px;
+        border-radius: 4px;
+        color: white;
+        font-weight: 500;
+        z-index: 9999;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        opacity: 0;
+        transform: translateY(20px);
+        animation: toastFadeIn 0.3s ease forwards;
+      }
+
+      .toast-success {
+        background-color: var(--success-color);
+      }
+
+      .toast-error {
+        background-color: var(--danger-color);
+      }
+
+      @keyframes toastFadeIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes toastFadeOut {
+        to {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="nexus-header sticky top-0 z-50">
+      <div class="container mx-auto px-4 py-4">
+        <div class="flex justify-between items-center">
+          <!-- Logo & Navigation -->
+          <div class="flex items-center">
+            <a href="#" class="text-xl md:text-2xl font-bold flex items-center">
+              <span class="text-primary-600 mr-1">Nexus</span>
+              <span class="text-gray-800 dark:text-gray-200">Development</span>
+              <span class="text-gray-500 ml-1">|</span>
+              <span class="text-gray-600 dark:text-gray-300 ml-1"
+                >Services</span
+              >
+            </a>
+            <nav class="hidden md:flex ml-10 space-x-8">
+              <a
+                href="#"
+                class="text-sm font-medium text-gray-800 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-600 transition duration-150"
+              >
+                Home
+              </a>
+              <a
+                href="#services"
+                class="text-sm font-medium text-gray-800 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-600 transition duration-150"
+              >
+                Services
+              </a>
+              <a
+                href="#products"
+                class="text-sm font-medium text-gray-800 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-600 transition duration-150"
+              >
+                Products
+              </a>
+              <a
+                href="#courses"
+                class="text-sm font-medium text-gray-800 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-600 transition duration-150"
+              >
+                Courses
+              </a>
+              <a
+                href="#contact"
+                class="text-sm font-medium text-gray-800 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-600 transition duration-150"
+              >
+                Contact
+              </a>
+            </nav>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex items-center space-x-4">
+            <div class="relative hidden md:block">
+              <input
+                type="text"
+                placeholder="Search..."
+                class="nexus-input py-2 pl-10 pr-4 rounded-lg w-56 text-sm"
+              />
+              <i
+                class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              ></i>
+            </div>
+            <a
+              href="#"
+              class="hidden md:flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-600"
+            >
+              <i class="fas fa-user"></i>
+              <span class="text-sm">Login</span>
+            </a>
+            <button
+              id="cartBtn"
+              class="relative p-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-600"
+            >
+              <i class="fas fa-shopping-cart"></i>
+              <span
+                class="absolute -top-1 -right-1 bg-primary-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full"
+                >0</span
+              >
+            </button>
+            <button
+              id="mobileMenuBtn"
+              class="md:hidden p-2 text-gray-700 dark:text-gray-300 focus:outline-none"
+            >
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="md:hidden mt-4 hidden">
+          <nav class="flex flex-col space-y-3 py-3">
+            <a
+              href="#"
+              class="text-base font-medium text-gray-800 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-600 transition duration-150"
+            >
+              Home
+            </a>
+            <a
+              href="#services"
+              class="text-base font-medium text-gray-800 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-600 transition duration-150"
+            >
+              Services
+            </a>
+            <a
+              href="#products"
+              class="text-base font-medium text-gray-800 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-600 transition duration-150"
+            >
+              Products
+            </a>
+            <a
+              href="#courses"
+              class="text-base font-medium text-gray-800 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-600 transition duration-150"
+            >
+              Courses
+            </a>
+            <a
+              href="#contact"
+              class="text-base font-medium text-gray-800 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-600 transition duration-150"
+            >
+              Contact
+            </a>
+            <div class="pt-3 border-t border-gray-200 dark:border-gray-700">
+              <a
+                href="#"
+                class="text-base font-medium text-gray-800 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-600 transition duration-150"
+              >
+                Login / Register
+              </a>
+            </div>
+            <div class="relative mt-2">
+              <input
+                type="text"
+                placeholder="Search..."
+                class="nexus-input py-2 pl-10 pr-4 rounded-lg w-full text-base"
+              />
+              <i
+                class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              ></i>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section py-12 md:py-20">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center">
+          <div class="md:w-1/2 mb-8 md:mb-0 md:pr-10">
+            <h1
+              class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4"
+            >
+              Professional Development Services & Products
+            </h1>
+            <p class="text-lg text-gray-600 dark:text-gray-300 mb-6">
+              Transform your ideas into reality with our expert development
+              services, premium products, and comprehensive courses.
+            </p>
+            <div
+              class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4"
+            >
+              <a
+                href="#services"
+                class="nexus-btn nexus-primary-btn text-white px-6 py-3 rounded-lg font-medium text-center"
+              >
+                Explore Services
+              </a>
+              <a
+                href="#contact"
+                class="nexus-btn bg-transparent border-2 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 px-6 py-3 rounded-lg font-medium text-center hover:border-primary-600 hover:text-primary-600 dark:hover:border-primary-600 dark:hover:text-primary-600"
+              >
+                Contact Us
+              </a>
+            </div>
+          </div>
+          <div class="md:w-1/2 relative">
+            <img
+              src="https://images.unsplash.com/photo-1603969072881-b0fc7f3d77d7?w=800&auto=format&fit=crop&q=80"
+              alt="Nexus Development Services"
+              class="rounded-lg shadow-xl w-full"
+            />
+            <div
+              class="absolute -bottom-4 -left-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg hidden md:block"
+            >
+              <div class="flex items-center">
+                <div class="p-2 bg-primary-600 bg-opacity-10 rounded-full mr-3">
+                  <i class="fas fa-code text-primary-600"></i>
+                </div>
+                <div>
+                  <p class="font-bold text-gray-800 dark:text-gray-200">
+                    Expert Solutions
+                  </p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">
+                    For Business & Individuals
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Category Section -->
+    <section class="py-12">
+      <div class="container mx-auto px-4">
+        <h2 class="text-2xl md:text-3xl font-bold mb-2 text-center">
+          Explore Our Categories
+        </h2>
+        <p
+          class="text-gray-600 dark:text-gray-300 mb-10 text-center max-w-2xl mx-auto"
+        >
+          Discover our comprehensive range of development services, products,
+          and educational resources
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <a
+            href="#services"
+            class="category-card rounded-lg shadow-lg flex items-end"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1600132806370-bf17e65e942f?w=500&auto=format&fit=crop&q=60');
+            "
+          >
+            <div class="p-5 w-full category-title">
+              <h3 class="text-xl font-bold text-white mb-1">Services</h3>
+              <p class="text-gray-200 text-sm">
+                Professional development services tailored to your needs
+              </p>
+            </div>
+          </a>
+
+          <a
+            href="#products"
+            class="category-card rounded-lg shadow-lg flex items-end"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?w=500&auto=format&fit=crop&q=60');
+            "
+          >
+            <div class="p-5 w-full category-title">
+              <h3 class="text-xl font-bold text-white mb-1">Products</h3>
+              <p class="text-gray-200 text-sm">
+                Premium development tools and software solutions
+              </p>
+            </div>
+          </a>
+
+          <a
+            href="#courses"
+            class="category-card rounded-lg shadow-lg flex items-end"
+            style="
+              background-image: url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&auto=format&fit=crop&q=60');
+            "
+          >
+            <div class="p-5 w-full category-title">
+              <h3 class="text-xl font-bold text-white mb-1">Courses</h3>
+              <p class="text-gray-200 text-sm">
+                Comprehensive learning resources for developers
+              </p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Services Section -->
+    <section id="services" class="py-12 bg-gray-50 dark:bg-gray-900">
+      <div class="container mx-auto px-4">
+        <div class="flex justify-between items-end mb-10">
+          <div>
+            <span class="text-primary-600 font-medium text-sm"
+              >WHAT WE OFFER</span
+            >
+            <h2 class="text-2xl md:text-3xl font-bold mt-1">Our Services</h2>
+          </div>
+          <a
+            href="#"
+            class="text-primary-600 hover:text-primary-800 dark:hover:text-primary-400 font-medium flex items-center"
+          >
+            View All <i class="fas fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Service Card 1 -->
+          <div class="nexus-card overflow-hidden animate-fade-in">
+            <div class="relative">
+              <img
+                src="https://images.unsplash.com/photo-1600132806370-bf17e65e942f?w=500&auto=format&fit=crop&q=60"
+                alt="UI/UX Design"
+                class="w-full h-48 object-cover"
+              />
+              <div class="featured-tag">Featured</div>
+            </div>
+            <div class="p-6">
+              <h3 class="font-bold text-xl mb-2">UI/UX Design Consultation</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                Expert consultation for improving user interface and experience
+                design of your digital products.
+              </p>
+              <div class="flex justify-between items-center mb-4">
+                <div class="star-rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                  <span class="text-gray-600 dark:text-gray-300 text-sm ml-1"
+                    >4.5</span
+                  >
+                </div>
+                <span class="font-bold text-primary-600">$89/hr</span>
+              </div>
+              <button
+                class="nexus-btn nexus-primary-btn text-white w-full py-2 rounded-lg font-medium text-center add-to-cart"
+                data-id="1"
+                data-type="service"
+                data-name="UI/UX Design Consultation"
+                data-price="89"
+              >
+                Request Service
+              </button>
+            </div>
+          </div>
+
+          <!-- Service Card 2 -->
+          <div class="nexus-card overflow-hidden animate-fade-in">
+            <div class="relative">
+              <img
+                src="https://images.unsplash.com/photo-1610465299996-30f240ac2b1c?w=500&auto=format&fit=crop&q=60"
+                alt="Web Development"
+                class="w-full h-48 object-cover"
+              />
+            </div>
+            <div class="p-6">
+              <h3 class="font-bold text-xl mb-2">Web Development Package</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                Complete website development with responsive design, SEO
+                optimization, and CMS integration.
+              </p>
+              <div class="flex justify-between items-center mb-4">
+                <div class="star-rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <span class="text-gray-600 dark:text-gray-300 text-sm ml-1"
+                    >5.0</span
+                  >
+                </div>
+                <span class="font-bold text-primary-600">$1,299</span>
+              </div>
+              <button
+                class="nexus-btn nexus-primary-btn text-white w-full py-2 rounded-lg font-medium text-center add-to-cart"
+                data-id="2"
+                data-type="service"
+                data-name="Web Development Package"
+                data-price="1299"
+              >
+                Request Service
+              </button>
+            </div>
+          </div>
+
+          <!-- Service Card 3 -->
+          <div class="nexus-card overflow-hidden animate-fade-in">
+            <div class="relative">
+              <img
+                src="https://images.unsplash.com/photo-1543269865-0a740d43b90c?w=500&auto=format&fit=crop&q=60"
+                alt="Mobile App Development"
+                class="w-full h-48 object-cover"
+              />
+            </div>
+            <div class="p-6">
+              <h3 class="font-bold text-xl mb-2">Mobile App Development</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                Full-cycle mobile app development for iOS and Android platforms
+                with backend integration.
+              </p>
+              <div class="flex justify-between items-center mb-4">
+                <div class="star-rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="far fa-star"></i>
+                  <span class="text-gray-600 dark:text-gray-300 text-sm ml-1"
+                    >4.0</span
+                  >
+                </div>
+                <span class="font-bold text-primary-600">$3,499</span>
+              </div>
+              <button
+                class="nexus-btn nexus-primary-btn text-white w-full py-2 rounded-lg font-medium text-center add-to-cart"
+                data-id="3"
+                data-type="service"
+                data-name="Mobile App Development"
+                data-price="3499"
+              >
+                Request Service
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section id="products" class="py-12">
+      <div class="container mx-auto px-4">
+        <div class="flex justify-between items-end mb-10">
+          <div>
+            <span class="text-primary-600 font-medium text-sm"
+              >PREMIUM SOLUTIONS</span
+            >
+            <h2 class="text-2xl md:text-3xl font-bold mt-1">Our Products</h2>
+          </div>
+          <a
+            href="#"
+            class="text-primary-600 hover:text-primary-800 dark:hover:text-primary-400 font-medium flex items-center"
+          >
+            View All <i class="fas fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Product Card 1 -->
+          <div class="nexus-card overflow-hidden animate-fade-in">
+            <div class="relative">
+              <img
+                src="https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?w=500&auto=format&fit=crop&q=60"
+                alt="WordPress Theme"
+                class="w-full h-48 object-cover"
+              />
+              <div class="featured-tag">Featured</div>
+            </div>
+            <div class="p-6">
+              <h3 class="font-bold text-xl mb-2">Premium WordPress Theme</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                Responsive WordPress theme with customizable components and
+                dedicated support.
+              </p>
+              <div class="flex justify-between items-center mb-4">
+                <div class="star-rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                  <span class="text-gray-600 dark:text-gray-300 text-sm ml-1"
+                    >4.5</span
+                  >
+                </div>
+                <span class="font-bold text-primary-600">$79</span>
+              </div>
+              <button
+                class="nexus-btn nexus-primary-btn text-white w-full py-2 rounded-lg font-medium text-center add-to-cart"
+                data-id="4"
+                data-type="product"
+                data-name="Premium WordPress Theme"
+                data-price="79"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+
+          <!-- Product Card 2 -->
+          <div class="nexus-card overflow-hidden animate-fade-in">
+            <div class="relative">
+              <img
+                src="https://images.unsplash.com/photo-1533750516457-a7f992034fec?w=500&auto=format&fit=crop&q=60"
+                alt="Admin Dashboard"
+                class="w-full h-48 object-cover"
+              />
+            </div>
+            <div class="p-6">
+              <h3 class="font-bold text-xl mb-2">Admin Dashboard Template</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                Feature-rich admin dashboard with dark/light modes, charts, and
+                responsive design.
+              </p>
+              <div class="flex justify-between items-center mb-4">
+                <div class="star-rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <span class="text-gray-600 dark:text-gray-300 text-sm ml-1"
+                    >5.0</span
+                  >
+                </div>
+                <span class="font-bold text-primary-600">$59</span>
+              </div>
+              <button
+                class="nexus-btn nexus-primary-btn text-white w-full py-2 rounded-lg font-medium text-center add-to-cart"
+                data-id="5"
+                data-type="product"
+                data-name="Admin Dashboard Template"
+                data-price="59"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+
+          <!-- Product Card 3 -->
+          <div class="nexus-card overflow-hidden animate-fade-in">
+            <div class="relative">
+              <img
+                src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=500&auto=format&fit=crop&q=60"
+                alt="E-commerce Starter Kit"
+                class="w-full h-48 object-cover"
+              />
+            </div>
+            <div class="p-6">
+              <h3 class="font-bold text-xl mb-2">E-commerce Starter Kit</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                Complete e-commerce solution with payment processing, inventory
+                management, and analytics.
+              </p>
+              <div class="flex justify-between items-center mb-4">
+                <div class="star-rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="far fa-star"></i>
+                  <span class="text-gray-600 dark:text-gray-300 text-sm ml-1"
+                    >4.0</span
+                  >
+                </div>
+                <span class="font-bold text-primary-600">$129</span>
+              </div>
+              <button
+                class="nexus-btn nexus-primary-btn text-white w-full py-2 rounded-lg font-medium text-center add-to-cart"
+                data-id="6"
+                data-type="product"
+                data-name="E-commerce Starter Kit"
+                data-price="129"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Courses Section -->
+    <section id="courses" class="py-12 bg-gray-50 dark:bg-gray-900">
+      <div class="container mx-auto px-4">
+        <div class="flex justify-between items-end mb-10">
+          <div>
+            <span class="text-primary-600 font-medium text-sm"
+              >EXPAND YOUR KNOWLEDGE</span
+            >
+            <h2 class="text-2xl md:text-3xl font-bold mt-1">Our Courses</h2>
+          </div>
+          <a
+            href="#"
+            class="text-primary-600 hover:text-primary-800 dark:hover:text-primary-400 font-medium flex items-center"
+          >
+            View All <i class="fas fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Course Card 1 -->
+          <div class="nexus-card overflow-hidden animate-fade-in">
+            <div class="relative">
+              <img
+                src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&auto=format&fit=crop&q=60"
+                alt="Full-Stack Development Course"
+                class="w-full h-48 object-cover"
+              />
+              <div class="featured-tag">Featured</div>
+            </div>
+            <div class="p-6">
+              <h3 class="font-bold text-xl mb-2">
+                Full-Stack Development Course
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                Comprehensive course covering frontend and backend development
+                with modern frameworks.
+              </p>
+              <div class="flex items-center space-x-2 mb-4">
+                <span
+                  class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs py-1 px-2 rounded"
+                  >JavaScript</span
+                >
+                <span
+                  class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs py-1 px-2 rounded"
+                  >React</span
+                >
+                <span
+                  class="bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 text-xs py-1 px-2 rounded"
+                  >Node.js</span
+                >
+              </div>
+              <div class="flex justify-between items-center mb-4">
+                <div class="star-rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                  <span class="text-gray-600 dark:text-gray-300 text-sm ml-1"
+                    >4.5</span
+                  >
+                </div>
+                <span class="font-bold text-primary-600">$349</span>
+              </div>
+              <button
+                class="nexus-btn nexus-primary-btn text-white w-full py-2 rounded-lg font-medium text-center add-to-cart"
+                data-id="7"
+                data-type="course"
+                data-name="Full-Stack Development Course"
+                data-price="349"
+              >
+                Enroll Now
+              </button>
+            </div>
+          </div>
+
+          <!-- Course Card 2 -->
+          <div class="nexus-card overflow-hidden animate-fade-in">
+            <div class="relative">
+              <img
+                src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=500&auto=format&fit=crop&q=60"
+                alt="UI/UX Design Masterclass"
+                class="w-full h-48 object-cover"
+              />
+            </div>
+            <div class="p-6">
+              <h3 class="font-bold text-xl mb-2">UI/UX Design Masterclass</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                Learn modern UI/UX design principles, tools, and workflows from
+                industry experts.
+              </p>
+              <div class="flex items-center space-x-2 mb-4">
+                <span
+                  class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs py-1 px-2 rounded"
+                  >Figma</span
+                >
+                <span
+                  class="bg-pink-100 dark:bg-pink-900 text-pink-800 dark:text-pink-200 text-xs py-1 px-2 rounded"
+                  >Adobe XD</span
+                >
+                <span
+                  class="bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 text-xs py-1 px-2 rounded"
+                  >Design</span
+                >
+              </div>
+              <div class="flex justify-between items-center mb-4">
+                <div class="star-rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="far fa-star"></i>
+                  <span class="text-gray-600 dark:text-gray-300 text-sm ml-1"
+                    >4.0</span
+                  >
+                </div>
+                <span class="font-bold text-primary-600">$299</span>
+              </div>
+              <button
+                class="nexus-btn nexus-primary-btn text-white w-full py-2 rounded-lg font-medium text-center add-to-cart"
+                data-id="8"
+                data-type="course"
+                data-name="UI/UX Design Masterclass"
+                data-price="299"
+              >
+                Enroll Now
+              </button>
+            </div>
+          </div>
+
+          <!-- Course Card 3 -->
+          <div class="nexus-card overflow-hidden animate-fade-in">
+            <div class="relative">
+              <img
+                src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=500&auto=format&fit=crop&q=60"
+                alt="Mobile App Development"
+                class="w-full h-48 object-cover"
+              />
+            </div>
+            <div class="p-6">
+              <h3 class="font-bold text-xl mb-2">Mobile App Development</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                Build cross-platform mobile apps with React Native and integrate
+                with backend services.
+              </p>
+              <div class="flex items-center space-x-2 mb-4">
+                <span
+                  class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs py-1 px-2 rounded"
+                  >React Native</span
+                >
+                <span
+                  class="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 text-xs py-1 px-2 rounded"
+                  >Firebase</span
+                >
+                <span
+                  class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs py-1 px-2 rounded"
+                  >Mobile</span
+                >
+              </div>
+              <div class="flex justify-between items-center mb-4">
+                <div class="star-rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <span class="text-gray-600 dark:text-gray-300 text-sm ml-1"
+                    >5.0</span
+                  >
+                </div>
+                <span class="font-bold text-primary-600">$399</span>
+              </div>
+              <button
+                class="nexus-btn nexus-primary-btn text-white w-full py-2 rounded-lg font-medium text-center add-to-cart"
+                data-id="9"
+                data-type="course"
+                data-name="Mobile App Development"
+                data-price="399"
+              >
+                Enroll Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-12">
+      <div class="container mx-auto px-4">
+        <h2 class="text-2xl md:text-3xl font-bold mb-2 text-center">
+          What Our Clients Say
+        </h2>
+        <p
+          class="text-gray-600 dark:text-gray-300 mb-10 text-center max-w-2xl mx-auto"
+        >
+          Read testimonials from our satisfied customers about their experience
+          with our services and products
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Testimonial 1 -->
+          <div class="nexus-card p-6">
+            <div class="flex items-center mb-4">
+              <div
+                class="w-12 h-12 rounded-full bg-primary-600 flex items-center justify-center text-white font-bold mr-4"
+              >
+                JD
+              </div>
+              <div>
+                <h4 class="font-bold">John Doe</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                  CEO, TechStart
+                </p>
+              </div>
+            </div>
+            <div class="star-rating mb-3">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p class="text-gray-700 dark:text-gray-300">
+              "Nexus Development delivered our website on time and exceeded our
+              expectations. The team was professional, responsive, and delivered
+              a product that has significantly improved our online presence."
+            </p>
+          </div>
+
+          <!-- Testimonial 2 -->
+          <div class="nexus-card p-6">
+            <div class="flex items-center mb-4">
+              <div
+                class="w-12 h-12 rounded-full bg-green-600 flex items-center justify-center text-white font-bold mr-4"
+              >
+                SJ
+              </div>
+              <div>
+                <h4 class="font-bold">Sarah Johnson</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                  Marketing Director, GrowthLabs
+                </p>
+              </div>
+            </div>
+            <div class="star-rating mb-3">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+            <p class="text-gray-700 dark:text-gray-300">
+              "The mobile app Nexus developed for our company has transformed
+              how we engage with our customers. The UI/UX design is intuitive
+              and the functionality is exactly what we needed."
+            </p>
+          </div>
+
+          <!-- Testimonial 3 -->
+          <div class="nexus-card p-6">
+            <div class="flex items-center mb-4">
+              <div
+                class="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold mr-4"
+              >
+                RP
+              </div>
+              <div>
+                <h4 class="font-bold">Robert Parker</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                  Freelance Developer
+                </p>
+              </div>
+            </div>
+            <div class="star-rating mb-3">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p class="text-gray-700 dark:text-gray-300">
+              "The Full-Stack Development course was comprehensive and
+              practical. I was able to apply what I learned immediately in my
+              projects, and it significantly improved my skills and job
+              prospects."
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-12 bg-primary-600 dark:bg-primary-800">
+      <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto text-center">
+          <h2 class="text-2xl md:text-3xl font-bold mb-2 text-white">
+            Stay Updated
+          </h2>
+          <p class="text-white text-opacity-80 mb-6">
+            Subscribe to our newsletter to receive the latest updates, offers,
+            and industry insights
+          </p>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              class="nexus-input rounded-lg py-3 px-4 text-base flex-grow"
+            />
+            <button
+              class="nexus-btn bg-white text-primary-600 py-3 px-6 rounded-lg font-medium"
+            >
+              Subscribe
+            </button>
+          </div>
+          <p class="text-white text-opacity-60 text-sm mt-4">
+            We respect your privacy. Unsubscribe at any time.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-12">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row gap-10">
+          <div class="md:w-1/2">
+            <span class="text-primary-600 font-medium text-sm"
+              >GET IN TOUCH</span
+            >
+            <h2 class="text-2xl md:text-3xl font-bold mt-1 mb-4">Contact Us</h2>
+            <p class="text-gray-600 dark:text-gray-300 mb-6">
+              Have questions about our services, products, or courses? Contact
+              us and our team will get back to you as soon as possible.
+            </p>
+
+            <div class="space-y-4 mb-6">
+              <div class="flex items-start">
+                <div
+                  class="p-2 bg-primary-600 bg-opacity-10 rounded-full mr-3 mt-1"
+                >
+                  <i class="fas fa-map-marker-alt text-primary-600"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-800 dark:text-gray-200">
+                    Our Location
+                  </h4>
+                  <p class="text-gray-600 dark:text-gray-400">
+                    123 Tech Street, Innovation City, CA 92100
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-start">
+                <div
+                  class="p-2 bg-primary-600 bg-opacity-10 rounded-full mr-3 mt-1"
+                >
+                  <i class="fas fa-envelope text-primary-600"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-800 dark:text-gray-200">
+                    Email Us
+                  </h4>
+                  <p class="text-gray-600 dark:text-gray-400">
+                    contact@nexusdevelopment.com
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-start">
+                <div
+                  class="p-2 bg-primary-600 bg-opacity-10 rounded-full mr-3 mt-1"
+                >
+                  <i class="fas fa-phone-alt text-primary-600"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-800 dark:text-gray-200">
+                    Call Us
+                  </h4>
+                  <p class="text-gray-600 dark:text-gray-400">
+                    +1 (800) 123-4567
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex space-x-4">
+              <a
+                href="#"
+                class="p-3 bg-gray-100 dark:bg-gray-800 rounded-full text-gray-600 dark:text-gray-300 hover:bg-primary-600 hover:text-white transition duration-300"
+              >
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a
+                href="#"
+                class="p-3 bg-gray-100 dark:bg-gray-800 rounded-full text-gray-600 dark:text-gray-300 hover:bg-primary-600 hover:text-white transition duration-300"
+              >
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a
+                href="#"
+                class="p-3 bg-gray-100 dark:bg-gray-800 rounded-full text-gray-600 dark:text-gray-300 hover:bg-primary-600 hover:text-white transition duration-300"
+              >
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+              <a
+                href="#"
+                class="p-3 bg-gray-100 dark:bg-gray-800 rounded-full text-gray-600 dark:text-gray-300 hover:bg-primary-600 hover:text-white transition duration-300"
+              >
+                <i class="fab fa-instagram"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="md:w-1/2">
+            <div class="nexus-card p-6">
+              <h3 class="font-bold text-xl mb-4">Send us a Message</h3>
+              <form id="contactForm">
+                <div class="space-y-4">
+                  <div>
+                    <label for="name" class="block text-sm font-medium mb-1"
+                      >Name</label
+                    >
+                    <input
+                      type="text"
+                      id="name"
+                      class="nexus-input rounded-md w-full py-2 px-3 text-base"
+                      placeholder="Your name"
+                    />
+                  </div>
+
+                  <div>
+                    <label for="email" class="block text-sm font-medium mb-1"
+                      >Email</label
+                    >
+                    <input
+                      type="email"
+                      id="email"
+                      class="nexus-input rounded-md w-full py-2 px-3 text-base"
+                      placeholder="Your email"
+                    />
+                  </div>
+
+                  <div>
+                    <label for="subject" class="block text-sm font-medium mb-1"
+                      >Subject</label
+                    >
+                    <select
+                      id="subject"
+                      class="nexus-input rounded-md w-full py-2 px-3 text-base"
+                    >
+                      <option value="">Select a subject</option>
+                      <option value="general">General Inquiry</option>
+                      <option value="service">Service Request</option>
+                      <option value="product">Product Support</option>
+                      <option value="course">Course Information</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label for="message" class="block text-sm font-medium mb-1"
+                      >Message</label
+                    >
+                    <textarea
+                      id="message"
+                      rows="4"
+                      class="nexus-input rounded-md w-full py-2 px-3 text-base"
+                      placeholder="Your message"
+                    ></textarea>
+                  </div>
+
+                  <button
+                    type="submit"
+                    class="nexus-btn nexus-primary-btn text-white py-2 px-4 rounded-md w-full"
+                  >
+                    Send Message
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="nexus-footer pt-12 pb-6">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+          <div>
+            <h3 class="text-lg font-bold mb-4">Nexus Development</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+              Providing professional development services, products, and
+              educational resources to help businesses and individuals succeed.
+            </p>
+            <div class="flex space-x-4">
+              <a
+                href="#"
+                class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+              >
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a
+                href="#"
+                class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+              >
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a
+                href="#"
+                class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+              >
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+              <a
+                href="#"
+                class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+              >
+                <i class="fab fa-instagram"></i>
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-bold mb-4">Services</h3>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+                  >Web Development</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+                  >Mobile App Development</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+                  >UI/UX Design</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+                  >SEO Optimization</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+                  >Consulting</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-bold mb-4">Products</h3>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+                  >WordPress Themes</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+                  >Admin Templates</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+                  >E-commerce Solutions</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+                  >Custom Plugins</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+                  >Mobile UI Kits</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-bold mb-4">Resources</h3>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+                  >Blog</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+                  >Documentation</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+                  >Courses</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+                  >Tutorials</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-600"
+                  >Support</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+          <div class="flex flex-col md:flex-row justify-between items-center">
+            <p class="text-gray-600 dark:text-gray-400 text-sm">
+              &copy; 2023 Nexus Development. All rights reserved.
+            </p>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+              <a
+                href="#"
+                class="text-gray-600 dark:text-gray-400 text-sm hover:text-primary-600 dark:hover:text-primary-600"
+              >
+                Privacy Policy
+              </a>
+              <a
+                href="#"
+                class="text-gray-600 dark:text-gray-400 text-sm hover:text-primary-600 dark:hover:text-primary-600"
+              >
+                Terms of Service
+              </a>
+              <a
+                href="#"
+                class="text-gray-600 dark:text-gray-400 text-sm hover:text-primary-600 dark:hover:text-primary-600"
+              >
+                Cookie Policy
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Cart Modal -->
+    <div
+      id="cartModal"
+      class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden"
+    >
+      <div
+        class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full"
+      >
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold">Your Cart</h3>
+            <button
+              id="closeCartBtn"
+              class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+            >
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+
+          <div id="cartItems" class="max-h-64 overflow-y-auto mb-4">
+            <!-- Cart items will appear here -->
+            <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+              Your cart is empty
+            </div>
+          </div>
+
+          <div class="border-t border-gray-200 dark:border-gray-700 pt-4 mb-4">
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-medium">Subtotal:</span>
+              <span class="font-bold" id="cartSubtotal">$0.00</span>
+            </div>
+          </div>
+
+          <div class="flex space-x-3">
+            <button
+              id="clearCartBtn"
+              class="py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 flex-1"
+            >
+              Clear Cart
+            </button>
+            <button
+              id="checkoutBtn"
+              class="nexus-btn nexus-primary-btn text-white py-2 px-4 rounded-md flex-1"
+            >
+              Checkout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // Store DOM elements
+        const elements = {
+          mobileMenuBtn: document.getElementById('mobileMenuBtn'),
+          mobileMenu: document.getElementById('mobileMenu'),
+          cartBtn: document.getElementById('cartBtn'),
+          cartModal: document.getElementById('cartModal'),
+          closeCartBtn: document.getElementById('closeCartBtn'),
+          cartItems: document.getElementById('cartItems'),
+          cartSubtotal: document.getElementById('cartSubtotal'),
+          clearCartBtn: document.getElementById('clearCartBtn'),
+          checkoutBtn: document.getElementById('checkoutBtn'),
+          contactForm: document.getElementById('contactForm'),
+        };
+
+        // Initialize app state
+        const state = {
+          cart: [],
+          cartCount: 0,
+          cartSubtotal: 0,
+        };
+
+        // Initialize app functionality
+        initializeEventListeners();
+
+        // Define all event listeners
+        function initializeEventListeners() {
+          // Mobile menu toggle
+          elements.mobileMenuBtn.addEventListener('click', function () {
+            elements.mobileMenu.classList.toggle('hidden');
+          });
+
+          // Cart modal
+          elements.cartBtn.addEventListener('click', function () {
+            elements.cartModal.classList.remove('hidden');
+            updateCartDisplay();
+          });
+
+          elements.closeCartBtn.addEventListener('click', function () {
+            elements.cartModal.classList.add('hidden');
+          });
+
+          // Close modal when clicking outside
+          elements.cartModal.addEventListener('click', function (event) {
+            if (event.target === elements.cartModal) {
+              elements.cartModal.classList.add('hidden');
+            }
+          });
+
+          // Clear cart
+          elements.clearCartBtn.addEventListener('click', function () {
+            state.cart = [];
+            state.cartCount = 0;
+            state.cartSubtotal = 0;
+            updateCartDisplay();
+            updateCartCount();
+            showToast('Cart cleared', 'success');
+          });
+
+          // Checkout
+          elements.checkoutBtn.addEventListener('click', function () {
+            if (state.cart.length === 0) {
+              showToast('Your cart is empty', 'error');
+              return;
+            }
+
+            showToast('Checkout functionality coming soon!', 'success');
+          });
+
+          // Add to cart buttons
+          document.querySelectorAll('.add-to-cart').forEach((button) => {
+            button.addEventListener('click', function () {
+              const id = this.dataset.id;
+              const type = this.dataset.type;
+              const name = this.dataset.name;
+              const price = parseFloat(this.dataset.price);
+
+              addToCart(id, type, name, price);
+            });
+          });
+
+          // Contact form submission
+          if (elements.contactForm) {
+            elements.contactForm.addEventListener('submit', function (event) {
+              event.preventDefault();
+
+              const name = document.getElementById('name').value.trim();
+              const email = document.getElementById('email').value.trim();
+              const subject = document.getElementById('subject').value;
+              const message = document.getElementById('message').value.trim();
+
+              if (!name || !email || !subject || !message) {
+                showToast('Please fill in all fields', 'error');
+                return;
+              }
+
+              // Simulate form submission
+              showToast(
+                'Message sent successfully! We will get back to you soon.',
+                'success'
+              );
+              elements.contactForm.reset();
+            });
+          }
+
+          // Smooth scrolling for anchor links
+          document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+            anchor.addEventListener('click', function (e) {
+              e.preventDefault();
+
+              const targetId = this.getAttribute('href');
+              if (targetId === '#') return;
+
+              const targetElement = document.querySelector(targetId);
+              if (targetElement) {
+                // Close mobile menu if open
+                if (!elements.mobileMenu.classList.contains('hidden')) {
+                  elements.mobileMenu.classList.add('hidden');
+                }
+
+                window.scrollTo({
+                  top: targetElement.offsetTop - 100,
+                  behavior: 'smooth',
+                });
+              }
+            });
+          });
+        }
+
+        // Add item to cart
+        function addToCart(id, type, name, price) {
+          // Check if item already exists in cart
+          const existingItem = state.cart.find((item) => item.id === id);
+
+          if (existingItem) {
+            existingItem.quantity += 1;
+          } else {
+            state.cart.push({
+              id,
+              type,
+              name,
+              price,
+              quantity: 1,
+            });
+          }
+
+          // Update cart count and subtotal
+          state.cartCount += 1;
+          state.cartSubtotal += price;
+
+          // Update UI
+          updateCartCount();
+          showToast(`${name} added to cart`, 'success');
+        }
+
+        // Update cart count in the header
+        function updateCartCount() {
+          const cartCountElement = document.querySelector('#cartBtn span');
+          cartCountElement.textContent = state.cartCount;
+        }
+
+        // Update cart display in modal
+        function updateCartDisplay() {
+          if (state.cart.length === 0) {
+            elements.cartItems.innerHTML = `
+                        <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+                            Your cart is empty
+                        </div>
+                    `;
+          } else {
+            elements.cartItems.innerHTML = state.cart
+              .map(
+                (item) => `
+                        <div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-700">
+                            <div>
+                                <h4 class="font-medium">${item.name}</h4>
+                                <div class="flex items-center mt-1">
+                                    <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-gray-600 dark:text-gray-400 capitalize">${
+                                      item.type
+                                    }</span>
+                                    <span class="text-gray-500 dark:text-gray-400 text-sm ml-2">Qty: ${
+                                      item.quantity
+                                    }</span>
+                                </div>
+                            </div>
+                            <div class="font-bold">$${(
+                              item.price * item.quantity
+                            ).toFixed(2)}</div>
+                        </div>
+                    `
+              )
+              .join('');
+          }
+
+          // Update subtotal
+          elements.cartSubtotal.textContent = `$${state.cartSubtotal.toFixed(
+            2
+          )}`;
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+          // Create toast element
+          const toast = document.createElement('div');
+          toast.className = `toast toast-${type}`;
+          toast.textContent = message;
+
+          // Add to document
+          document.body.appendChild(toast);
+
+          // Remove after 3 seconds
+          setTimeout(() => {
+            toast.style.animation = 'toastFadeOut 0.3s ease forwards';
+            setTimeout(() => {
+              document.body.removeChild(toast);
+            }, 300);
+          }, 3000);
+        }
+      });
+    </script>
+  </body>
+</html>
